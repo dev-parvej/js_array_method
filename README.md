@@ -6,7 +6,6 @@ This package is to implement javacript array methods which is missing in golang
 
 ```
 go get github.com/dev-parvej/js_array_method
-
 ```
 
 ## Usage
