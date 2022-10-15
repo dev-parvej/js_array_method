@@ -5,14 +5,14 @@ This package is to implement javacript array methods which is missing in golang
 ## Installation
 
 ```
-go get github.com/dev-parvej/go-js-array-methods
+go get github.com/dev-parvej/js_array_method
 
 ```
 
 ## Usage
 
 ```
-import js "github.com/dev-parvej/go-js-array-methods"
+import js "github.com/dev-parvej/js_array_method"
 
 type User struct {
 	Id   int
