@@ -5,13 +5,13 @@ import "testing"
 func TestFindWithStructSlice(t *testing.T) {
 	users := []User{{Id: 10, Name: "Go"}, {Id: 11, Name: "Lang"}}
 
-	user := Find(users, func(user User, index int) bool {
+	user, err := Find(users, func(user User, index int) bool {
 		return user.Id == 10
 	})
 
 	expected := "Go"
 
-	if user.Name != expected {
+	if err != nil {
 		t.Errorf("Expected %s received %s", expected, user.Name)
 	}
 }
@@ -19,7 +19,7 @@ func TestFindWithStructSlice(t *testing.T) {
 func TestFindWithStringSlice(t *testing.T) {
 	var slices = []string{"Go", "Typescript", "Nodejs"}
 
-	ln := Find(slices, "Go")
+	ln, _ := Find(slices, "Go")
 
 	expected := "Go"
 

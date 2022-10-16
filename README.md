@@ -26,6 +26,16 @@ users := []User{{Id: 10, Name: "Go"}, {Id: 11, Name: "Lang"}}
 
 ```
 
+### Find
+
+```
+user, err := js.Find(users, func(user User, index int) bool {
+    return user.Id == 10
+})
+// {Id: 10, Name: "Go"}
+
+```
+
 ### Filter
 
 ```

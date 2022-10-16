@@ -1,9 +1,14 @@
 package js_array_method
 
 import (
-	"fmt"
-	"reflect"
+	"errors"
 )
+
+func Foreach[T any](input []T, callback func(element T, index int)) {
+	for index, value := range input {
+		callback(value, index)
+	}
+}
 
 func Map[T any, U any](input []T, callback func(element T, index int) U) []U {
 	var output []U
@@ -50,60 +55,36 @@ func Reduce[T any, U any](input []T, callback func(pre U, current T, index int) 
 // conditions can be callback or a value
 // callback has two parameter one is element and another is index
 // callback must return true or false
-func Find[T any](input []T, conditions interface{}) T {
+func Find[T any](input []T, conditions interface{}) (T, error) {
 	var item T
+	index := FindIndex(input, conditions)
+
+	if index < 0 {
+		return item, errors.New("nothing found")
+	}
+
+	item = input[index]
+
+	return item, nil
+}
+
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func FindIndex[T any](input []T, conditions interface{}) int {
+	var itemIndex int = -1
 	conditionType := getType(conditions)
 	for index, value := range input {
 		if conditionType == "func" && callCallback(conditions, value, index) {
-			item = value
+			itemIndex = index
 			break
 		} else if conditionType != "func" && compareValue(conditions, value) {
-			item = value
+			itemIndex = index
 			break
 		}
 	}
 
-	return item
-}
-
-func Foreach[T any](input []T, callback func(element T, index int)) {
-	for index, value := range input {
-		callback(value, index)
-	}
-}
-
-func callCallback[T any](conditions interface{}, value T, index int) bool {
-	res := reflect.ValueOf(conditions).Call([]reflect.Value{reflect.ValueOf(value), reflect.ValueOf(index)})
-
-	return res[0].Bool()
-}
-
-func compareValue[T any](conditions interface{}, value T) bool {
-	res := reflect.ValueOf(conditions).String()
-	return res == fmt.Sprintf("%v", value)
-}
-
-func getType(conditions interface{}) string {
-	return reflect.TypeOf(conditions).Kind().String()
-}
-
-func calculateEveryElement[T any](input []T, conditions interface{}) []bool {
-	output := []bool{}
-
-	conditionType := getType(conditions)
-	for index, value := range input {
-		result := false
-		if conditionType == "func" {
-			result = callCallback(conditions, value, index)
-		} else {
-			result = compareValue(conditions, value)
-		}
-		if result {
-			output = append(output, true)
-		}
-	}
-
-	return output
+	return itemIndex
 }
 
 // conditions can be callback or a value
@@ -126,14 +107,8 @@ func Some[T any](input []T, conditions interface{}) any {
 // callback has two parameter one is element and another is index
 // callback must return true or false
 func Includes[T any](input []T, conditions interface{}) bool {
-	result := Find(input, conditions)
-
-	if getType(result) == "struct" && reflect.ValueOf(result).IsZero() {
-		return false
-	} else if getType(result) != "struct" && fmt.Sprintf("%v", result) == "" {
-		return false
-	}
-	return true
+	result := FindIndex(input, conditions)
+	return result >= 0
 }
 
 func Reverse[T any](input []T) []T {
