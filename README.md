@@ -91,5 +91,9 @@ Includes(languages, func(ln User, _ int) bool { return ln.Name == "Go" })
 Includes(languages, func(ln User, _ int) bool { return ln.Name == "MySql" })
 //false
 
+languages := []string{"go", "PHP", "MySql", "TypeScript"}
+Includes(languages, "TypeScript").
+//true
+
 ```
 
