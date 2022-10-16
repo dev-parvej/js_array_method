@@ -122,6 +122,9 @@ func Some[T any](input []T, conditions interface{}) any {
 	return len(output) > 0
 }
 
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
 func Includes[T any](input []T, conditions interface{}) bool {
 	result := Find(input, conditions)
 
@@ -131,4 +134,14 @@ func Includes[T any](input []T, conditions interface{}) bool {
 		return false
 	}
 	return true
+}
+
+func Reverse[T any](input []T) []T {
+	length := len(input) - 1
+	var output []T
+	for i := length; i >= 0; i-- {
+		output = append(output, input[i])
+	}
+
+	return output
 }
