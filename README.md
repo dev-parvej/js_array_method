@@ -131,3 +131,12 @@ FindIndex(users, "User5")
 //-1
 
 ```
+### Concat
+
+```
+users1 := []User{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}}
+users2 := []User{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}}
+Concat(users1, users2)
+//{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}, {Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}}
+
+```
