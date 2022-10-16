@@ -96,4 +96,10 @@ Includes(languages, "TypeScript").
 //true
 
 ```
+### Includes
 
+```
+users := []User{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}}
+Reverse(users)
+// {{Id: 12, Name: "Sabrina"}, {Id: 11, Name: "Doe"}, {Id: 10, Name: "John"}}
+```
