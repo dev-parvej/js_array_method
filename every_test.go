@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestEveryWithSlice(t *testing.T) {
+func TestEveryWithoutCallback(t *testing.T) {
 	resultFalse := Every([]string{"hey", "hi"}, "hi")
 	if resultFalse == true {
 		t.Errorf("Expected %s received %s", "false", "true")
@@ -17,7 +17,7 @@ func TestEveryWithSlice(t *testing.T) {
 	}
 }
 
-func TestEveryWithStruct(t *testing.T) {
+func TestEveryWithCallback(t *testing.T) {
 	users := []User{{Id: 12, Name: "Go"}, {Id: 14, Name: "Go"}}
 
 	resultFalse := Every(users, func(user User, _ int) bool {

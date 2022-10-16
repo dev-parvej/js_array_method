@@ -57,10 +57,7 @@ func Foreach[T any](input []T, callback func(element T, index int)) {
 	}
 }
 
-// conditions can be callback or a value
-// callback has two parameter one is element and another is index
-// callback must return true or false
-func Every[T any](input []T, conditions interface{}) any {
+func calculateEveryElement[T any](input []T, conditions interface{}) []bool {
 	output := []bool{}
 
 	conditionType := reflect.TypeOf(conditions).Kind().String()
@@ -81,5 +78,21 @@ func Every[T any](input []T, conditions interface{}) any {
 		}
 	}
 
+	return output
+}
+
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func Every[T any](input []T, conditions interface{}) any {
+	output := calculateEveryElement(input, conditions)
 	return len(output) == len(input)
+}
+
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func Some[T any](input []T, conditions interface{}) any {
+	output := calculateEveryElement(input, conditions)
+	return len(output) > 0
 }
