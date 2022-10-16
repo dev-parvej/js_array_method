@@ -19,9 +19,7 @@ func TestFindWithStructSlice(t *testing.T) {
 func TestFindWithStringSlice(t *testing.T) {
 	var slices = []string{"Go", "Typescript", "Nodejs"}
 
-	ln := Find(slices, func(ln string, index int) bool {
-		return ln == "Go"
-	})
+	ln := Find(slices, "Go")
 
 	expected := "Go"
 

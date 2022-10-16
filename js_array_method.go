@@ -17,12 +17,20 @@ func Map[T any, U any](input []T, callback func(element T, index int) U) []U {
 	return output
 }
 
-func Filter[T any](input []T, callback func(element T, index int) bool) []T {
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func Filter[T any](input []T, conditions interface{}) []T {
 	var output []T
+	conditionType := getType(conditions)
 
 	for index, value := range input {
-		if callback(value, index) {
+		if conditionType == "func" && callCallback(conditions, value, index) {
 			output = append(output, value)
+			continue
+		} else if conditionType != "func" && compareValue(conditions, value) {
+			output = append(output, value)
+			continue
 		}
 	}
 
@@ -39,10 +47,17 @@ func Reduce[T any, U any](input []T, callback func(pre U, current T, index int) 
 	return output
 }
 
-func Find[T any](input []T, callback func(element T, index int) bool) T {
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func Find[T any](input []T, conditions interface{}) T {
 	var item T
+	conditionType := getType(conditions)
 	for index, value := range input {
-		if callback(value, index) {
+		if conditionType == "func" && callCallback(conditions, value, index) {
+			item = value
+			break
+		} else if conditionType != "func" && compareValue(conditions, value) {
 			item = value
 			break
 		}
@@ -57,21 +72,31 @@ func Foreach[T any](input []T, callback func(element T, index int)) {
 	}
 }
 
+func callCallback[T any](conditions interface{}, value T, index int) bool {
+	res := reflect.ValueOf(conditions).Call([]reflect.Value{reflect.ValueOf(value), reflect.ValueOf(index)})
+
+	return res[0].Bool()
+}
+
+func compareValue[T any](conditions interface{}, value T) bool {
+	res := reflect.ValueOf(conditions).String()
+	return res == fmt.Sprintf("%v", value)
+}
+
+func getType(conditions interface{}) string {
+	return reflect.TypeOf(conditions).Kind().String()
+}
+
 func calculateEveryElement[T any](input []T, conditions interface{}) []bool {
 	output := []bool{}
 
-	conditionType := reflect.TypeOf(conditions).Kind().String()
-
+	conditionType := getType(conditions)
 	for index, value := range input {
 		result := false
 		if conditionType == "func" {
-			res := reflect.ValueOf(conditions).Call([]reflect.Value{reflect.ValueOf(value), reflect.ValueOf(index)})
-			result = res[0].Bool()
+			result = callCallback(conditions, value, index)
 		} else {
-			res := reflect.ValueOf(conditions).String()
-			if res == fmt.Sprintf("%v", value) {
-				result = true
-			}
+			result = compareValue(conditions, value)
 		}
 		if result {
 			output = append(output, true)
@@ -95,4 +120,15 @@ func Every[T any](input []T, conditions interface{}) any {
 func Some[T any](input []T, conditions interface{}) any {
 	output := calculateEveryElement(input, conditions)
 	return len(output) > 0
+}
+
+func Includes[T any](input []T, conditions interface{}) bool {
+	result := Find(input, conditions)
+
+	if getType(result) == "struct" && reflect.ValueOf(result).IsZero() {
+		return false
+	} else if getType(result) != "struct" && fmt.Sprintf("%v", result) == "" {
+		return false
+	}
+	return true
 }

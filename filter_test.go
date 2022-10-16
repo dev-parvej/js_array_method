@@ -20,9 +20,7 @@ func TestFilterWithStructSlice(t *testing.T) {
 func TestFilterWithStringSlice(t *testing.T) {
 	var slices = []string{"Go", "Typescript", "Nodejs"}
 
-	ln := Filter(slices, func(ln string, index int) bool {
-		return ln == "Go"
-	})
+	ln := Filter(slices, "Go")
 
 	expected := "Go"
 

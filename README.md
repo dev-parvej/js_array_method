@@ -32,33 +32,30 @@ users := []User{{Id: 10, Name: "Go"}, {Id: 11, Name: "Lang"}}
 filteredUsers := js.Filter(users, func(user User, index int) bool {
     return user.Id == 10
 })
-// filteredUsers
-{{Id: 10, Name: "Go"}}
+// {{Id: 10, Name: "Go"}}
 
 ```
 
 ### Map
 
 ```
-mapedUsers := js.Map(users, func(user User, index int) Foo {
+js.Map(users, func(user User, index int) Foo {
     return Foo{
         Bar: fmt.Sprintf("%d %s", user.Id, user.Name),
     }
 })
-// mapedUsers
-{{Bar: "10 Go"}, {Bar: "11 Lang"}}
+// {{Bar: "10 Go"}, {Bar: "11 Lang"}}
 
 ```
 
 ### Reduce 
 ```
 numbers := []int{10, 11, 12, 13}
-sum := js.Reduce(numbers, func(s int, n int, i int) int {
+js.Reduce(numbers, func(s int, n int, i int) int {
     return s + n
 }, 0)
 
-// sum
-46
+// 46
 ```
 
 ### Every
@@ -68,12 +65,10 @@ users := []User{{Id: 12, Name: "Go"}, {Id: 14, Name: "Go"}}
 resultTrue := Every(users, func(user User, _ int) bool {
     return user.Name == "Go"
 })
-// resultTrue
-true
+// true
 
-resultFalse := Every([]string{"hey", "hi"}, "hi")
-// resultFalse
-false
+Every([]string{"hey", "hi"}, "hi")
+// false
 ```
 
 ### Foreach
@@ -84,5 +79,17 @@ Foreach(slices, func(ln string, index int) {
     // ln contains the item of the slice
     // index contains item index
 })
+```
+
+### Includes
+
+```
+languages := []User{{Id: 12, Name: "Go"}, {Id: 14, Name: "Lang"}, {Id: 15, Name: "Typescript"}}
+
+Includes(languages, func(ln User, _ int) bool { return ln.Name == "Go" })
+//true
+Includes(languages, func(ln User, _ int) bool { return ln.Name == "MySql" })
+//false
+
 ```
 
