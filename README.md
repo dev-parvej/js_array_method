@@ -113,3 +113,21 @@ users := []User{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "S
 Reverse(users)
 // {{Id: 12, Name: "Sabrina"}, {Id: 11, Name: "Doe"}, {Id: 10, Name: "John"}}
 ```
+
+### FindIndex
+
+```
+users := []User{{Id: 10, Name: "John"}, {Id: 11, Name: "Doe"}, {Id: 12, Name: "Sabrina"}}
+FindIndex(users, func(user User, _ int) bool {
+    return user.Name == "Doe"
+})
+// 2
+
+users := []string{"User1", "User2", "User3", "User4"}
+
+FindIndex(users, "User1")
+//0
+FindIndex(users, "User5")
+//-1
+
+```
