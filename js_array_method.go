@@ -1,5 +1,10 @@
 package js_array_method
 
+import (
+	"fmt"
+	"reflect"
+)
+
 func Map[T any, U any](input []T, callback func(element T, index int) U) []U {
 	var output []U
 
@@ -50,4 +55,31 @@ func Foreach[T any](input []T, callback func(element T, index int)) {
 	for index, value := range input {
 		callback(value, index)
 	}
+}
+
+// conditions can be callback or a value
+// callback has two parameter one is element and another is index
+// callback must return true or false
+func Every[T any](input []T, conditions interface{}) any {
+	output := []bool{}
+
+	conditionType := reflect.TypeOf(conditions).Kind().String()
+
+	for index, value := range input {
+		result := false
+		if conditionType == "func" {
+			res := reflect.ValueOf(conditions).Call([]reflect.Value{reflect.ValueOf(value), reflect.ValueOf(index)})
+			result = res[0].Bool()
+		} else {
+			res := reflect.ValueOf(conditions).String()
+			if res == fmt.Sprintf("%v", value) {
+				result = true
+			}
+		}
+		if result {
+			output = append(output, true)
+		}
+	}
+
+	return len(output) == len(input)
 }
