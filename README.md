@@ -131,3 +131,5 @@ FindIndex(users, "User5")
 //-1
 
 ```
+
+[Support my work](https://www.paypal.com/donate/?business=6WXCNT3L8H9PA&no_recurring=0&currency_code=USD)
