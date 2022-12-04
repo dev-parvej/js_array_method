@@ -132,4 +132,4 @@ FindIndex(users, "User5")
 
 ```
 
-[Support my work](https://www.paypal.com/donate/?business=6WXCNT3L8H9PA&no_recurring=0&currency_code=USD)
+[Buy me a coffe](https://www.buymeacoffee.com/parvejcode)
