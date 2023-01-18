@@ -131,5 +131,6 @@ FindIndex(users, "User5")
 //-1
 
 ```
+If you find it usefull make sure you star the repo
 
 [Buy me a coffe](https://www.buymeacoffee.com/parvejcode)
